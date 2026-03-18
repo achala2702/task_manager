@@ -57,4 +57,13 @@ public class TaskService {
 
         return taskMapper.maptoTaskDto(task);
     }
+
+    public String deleteTask(Long taskId) {
+
+        TaskModel task = taskRepository.findById(taskId).orElseThrow(()-> new TaskNotFoundException("Task not found with ID: " + taskId));
+
+        taskRepository.delete(task);
+
+        return "Task deleted successfully!";
+    }
 }
