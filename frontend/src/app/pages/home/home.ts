@@ -5,10 +5,11 @@ import { TaskService } from '../../services/task-service';
 import { TaskModel } from '../../models/task-model';
 import { MatAnchor, MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from '@angular/material/icon';
+import { TaskForm } from '../../components/task-form/task-form';
 
 @Component({
   selector: 'app-home',
-  imports: [Header, TaskCard, MatAnchor, MatButtonModule, MatIconModule],
+  imports: [Header, TaskCard, MatAnchor, MatButtonModule, MatIconModule, TaskForm],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -18,6 +19,11 @@ export class Home implements OnInit {
   tasks = signal<TaskModel[]>([]);
   errorMessage = signal<string | null>(null);
   isLoading = signal<boolean>(false);
+  isTaskFormOpen = signal<boolean>(false);
+
+  toggleTaskForm() {
+    this.isTaskFormOpen.set(!this.isTaskFormOpen())
+  }
 
   loadTasks() {
     this.isLoading.set(true);

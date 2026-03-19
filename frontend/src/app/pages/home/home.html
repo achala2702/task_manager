@@ -5,11 +5,15 @@
     <p>loading tasks...</p>
   }
 
-  <button matButton="filled"><mat-icon>add</mat-icon>New Task</button>
+  <button matButton="filled" (click)="toggleTaskForm()"><mat-icon>add</mat-icon>New Task</button>
 
   <div class="task-container">
     @for (task of tasks(); track task.taskId) {
       <app-task-card [task]="task" />
     }
   </div>
+
+  @if (isTaskFormOpen()) {
+    <app-task-form (close)="toggleTaskForm()" />
+  }
 </main>
