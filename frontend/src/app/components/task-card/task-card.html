@@ -12,7 +12,7 @@
       {{ task().description }}
     </p>
     <mat-card-actions class="card-footer">
-      <app-drop-down [selectedStatus]="task().status" />
+      <app-drop-down [selectedStatus]="task().status" (statusChange)="onStatusChange($event)" />
     </mat-card-actions>
   </mat-card-content>
 </mat-card>

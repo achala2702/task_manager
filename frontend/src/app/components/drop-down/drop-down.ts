@@ -1,4 +1,4 @@
-import { Component, input, model } from '@angular/core';
+import { Component, input, model, output } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { StatusType } from '../../models/task-model';
@@ -17,7 +17,8 @@ interface TDropDown {
 })
 export class DropDown {
 
-  selectedStatus = model<StatusType>()
+  selectedStatus = model<StatusType>();
+  statusChange = output<StatusType>();
 
   statusLabels: TDropDown[] = [
       {value: "NOT_STARTED", viewValue: 'Not Started'},
@@ -26,7 +27,6 @@ export class DropDown {
   ];
 
   onStatusChange(newStatus: StatusType) {
-
-  console.log('Updating task to', newStatus);
+  this.statusChange.emit(newStatus);
 }
 }

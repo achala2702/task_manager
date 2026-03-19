@@ -2,7 +2,7 @@ import { Component, inject, input, output } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { DropDown } from '../drop-down/drop-down';
-import { TaskModel } from '../../models/task-model';
+import { StatusType, TaskModel } from '../../models/task-model';
 import { MatIconModule } from '@angular/material/icon';
 import { TaskService } from '../../services/task-service';
 import { MatDialog } from '@angular/material/dialog';
@@ -15,13 +15,14 @@ import { Dialog } from '../dialog/dialog';
   styleUrl: './task-card.scss',
 })
 export class TaskCard {
-  private taskService = inject(TaskService)
-  private dialog = inject(MatDialog)
+  private taskService = inject(TaskService);
+  private dialog = inject(MatDialog);
 
   task = input.required<TaskModel>();
 
   editRequest = output<TaskModel>();
   deleteRequest = output<number>();
+  statusChangeRequest = output<{taskId: number, newStatus: StatusType}>();
 
   onEditClick() {
     this.editRequest.emit(this.task());
@@ -41,5 +42,9 @@ export class TaskCard {
         });
       }
     });
+  }
+
+  onStatusChange(newStatus: StatusType) {
+    this.statusChangeRequest.emit({ taskId: this.task().taskId, newStatus });
   }
 }

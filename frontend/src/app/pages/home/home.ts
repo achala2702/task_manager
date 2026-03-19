@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { Header } from '../../components/header/header';
 import { TaskService } from '../../services/task-service';
-import { TaskModel } from '../../models/task-model';
+import { StatusType, TaskModel } from '../../models/task-model';
 import { MatAnchor, MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from '@angular/material/icon';
 import { TaskForm, TaskFormData } from '../../components/task-form/task-form';
@@ -82,6 +82,21 @@ export class Home implements OnInit {
       error: (err) => {
         console.error('Update Failed', err);
         this.errorMessage.set('Failed to update task. Please try again.');
+      },
+    });
+  }
+
+  onStatusChange({ taskId, newStatus }: { taskId: number; newStatus: StatusType }) {
+    this.taskService.updateStatus(taskId, newStatus).subscribe({
+      next: () => {
+        const task = this.tasks.find(t => t.taskId === taskId);
+        if (task) {
+          task.status = newStatus;
+        }
+      },
+      error: (err) => {
+        console.error('Status Update Failed', err);
+        this.errorMessage.set('Failed to update status. Please try again.');
       },
     });
   }

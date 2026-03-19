@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
-import { TaskModel } from '../models/task-model';
+import { StatusType, TaskModel } from '../models/task-model';
 import { environment } from '../../environments/environment.development';
 import { TaskFormData } from '../components/task-form/task-form';
 
@@ -13,27 +13,27 @@ export class TaskService {
   private apiUrl = `${environment.apiBaseUrl}/task`;
 
   getTasks() {
-    return this.http.get<TaskModel[]>(this.apiUrl).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.get<TaskModel[]>(this.apiUrl).pipe(catchError(this.handleError));
   }
 
   createTask(task: TaskFormData) {
-    return this.http.post<TaskModel>(this.apiUrl, task).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.post<TaskModel>(this.apiUrl, task).pipe(catchError(this.handleError));
   }
 
   updateTask(taskId: number, task: TaskFormData) {
-    return this.http.put<TaskModel>(`${this.apiUrl}/${taskId}`, task).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .put<TaskModel>(`${this.apiUrl}/${taskId}`, task)
+      .pipe(catchError(this.handleError));
+  }
+
+  updateStatus(taskId: number, status: StatusType) {
+    return this.http
+      .patch<void>(`${this.apiUrl}/${taskId}/status`, { status })
+      .pipe(catchError(this.handleError));
   }
 
   deleteTask(taskId: number) {
-    return this.http.delete<void>(`${this.apiUrl}/${taskId}`).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.delete<void>(`${this.apiUrl}/${taskId}`).pipe(catchError(this.handleError));
   }
 
   private handleError(error: any) {
