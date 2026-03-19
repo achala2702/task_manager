@@ -1,9 +1,10 @@
+<div class="overlay"></div>
 <mat-card appearance="outlined">
   <mat-card-header class="card-header">
     <mat-card-title class="card-title">{{ task().title }}</mat-card-title>
     <mat-card-actions>
-      <button matButton><mat-icon>edit</mat-icon>Edit</button>
-      <button matButton class="delete-btn"><mat-icon>delete</mat-icon>Delete</button>
+      <button matButton (click)="onEditClick()"><mat-icon>edit</mat-icon>Edit</button>
+      <button matButton class="delete-btn" (click)="onDeleteClick(task().taskId)" ><mat-icon>delete</mat-icon>Delete</button>
     </mat-card-actions>
   </mat-card-header>
   <mat-card-content class="card-content">

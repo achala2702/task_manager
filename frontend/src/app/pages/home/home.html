@@ -5,15 +5,15 @@
     <p>loading tasks...</p>
   }
 
-  <button matButton="filled" (click)="toggleTaskForm()"><mat-icon>add</mat-icon>New Task</button>
+  <button matButton="filled" (click)="openAddForm()"><mat-icon>add</mat-icon>New Task</button>
 
   <div class="task-container">
-    @for (task of tasks(); track task.taskId) {
-      <app-task-card [task]="task" />
+    @for (task of tasks; track task.taskId) {
+      <app-task-card [task]="task" (editRequest)="openEditForm($event)" (deleteRequest)="onDeleteRequest(task.taskId)"/>
     }
   </div>
 
   @if (isTaskFormOpen()) {
-    <app-task-form (close)="toggleTaskForm()" />
+    <app-task-form (close)="closeTaskForm()" [initialData]="editingTask" (submitCreate)="onFormSubmitCreate($event)" />
   }
 </main>

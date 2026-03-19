@@ -6,4 +6,5 @@ export interface TaskModel {
     title: string;
     description: string;
     status: StatusType;
+    createdAt?: string;
 }
