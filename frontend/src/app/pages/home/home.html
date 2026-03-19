@@ -14,6 +14,6 @@
   </div>
 
   @if (isTaskFormOpen()) {
-    <app-task-form (close)="closeTaskForm()" [initialData]="editingTask" (submitCreate)="onFormSubmitCreate($event)" />
+    <app-task-form (close)="closeTaskForm()" [initialData]="editingTask" (submitCreate)="onFormSubmitCreate($event)" (submitEdit)="onFormSubmitEdit($event)" />
   }
 </main>

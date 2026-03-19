@@ -24,7 +24,7 @@ export class TaskService {
     );
   }
 
-  updateTask(taskId: number, task: TaskModel) {
+  updateTask(taskId: number, task: TaskFormData) {
     return this.http.put<TaskModel>(`${this.apiUrl}/${taskId}`, task).pipe(
       catchError(this.handleError)
     );

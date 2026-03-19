@@ -26,16 +26,16 @@ public class TaskService {
         return taskMapper.maptoTaskDto(savedTask);
     }
 
-    public String updateTask(Long taskId, TaskRequestDto taskRequest) {
+    public TaskResponseDto updateTask(Long taskId, TaskRequestDto taskRequest) {
 
         TaskModel task = taskRepository.findById(taskId).orElseThrow(()-> new TaskNotFoundException("Task not found with ID: " + taskId));
 
         task.setTitle(taskRequest.title());
         task.setDescription(taskRequest.description());
 
-        taskRepository.save(task);
+        TaskModel updatedTask = taskRepository.save(task);
 
-        return "task updated successfully!";
+        return taskMapper.maptoTaskDto(updatedTask);
     }
 
     public void updateTaskStatus(Long taskId, StatusUpdateRequestDto statusDto) {

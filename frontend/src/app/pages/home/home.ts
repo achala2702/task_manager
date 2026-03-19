@@ -6,7 +6,6 @@ import { MatAnchor, MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from '@angular/material/icon';
 import { TaskForm, TaskFormData } from '../../components/task-form/task-form';
 import { TaskCard } from '../../components/task-card/task-card';
-import { single } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -61,12 +60,28 @@ export class Home implements OnInit {
 
   onFormSubmitCreate(formData: TaskFormData) {
     this.taskService.createTask(formData).subscribe({
-      next: () => {
-        this.loadTasks();
+      next: (newTask) => {
+        this.tasks.push(newTask);
         this.closeTaskForm();
       },
       error: (err) => {
         console.error('Create Failed', err);
+      },
+    });
+  }
+
+  onFormSubmitEdit({ taskId, task }: { taskId: number; task: TaskFormData }) {
+    this.taskService.updateTask(taskId, task).subscribe({
+      next: (updatedTask) => {
+        const index = this.tasks.findIndex(t => t.taskId === taskId);
+        if(index !== -1) {
+          this.tasks[index] = updatedTask;
+        }
+        this.closeTaskForm();
+      },
+      error: (err) => {
+        console.error('Update Failed', err);
+        this.errorMessage.set('Failed to update task. Please try again.');
       },
     });
   }
