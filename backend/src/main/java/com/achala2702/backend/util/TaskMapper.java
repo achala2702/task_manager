@@ -19,7 +19,7 @@ public class TaskMapper {
         return TaskResponseDto.builder()
                 .taskId(task.getTaskId())
                 .title(task.getTitle())
-                .Description(task.getDescription())
+                .description(task.getDescription())
                 .status(task.getStatus())
                 .createdAt(task.getCreatedAt())
                 .build();

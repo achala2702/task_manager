@@ -1,0 +1,15 @@
+<div class="overlay"></div>
+<form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+  <button type="button" class="close-btn" matIconButton (click)="onClose()"><mat-icon>close</mat-icon></button>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Title</mat-label>
+    <input matInput placeholder="title of the task" formControlName="title" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Description</mat-label>
+    <textarea matInput placeholder="description of the task" formControlName="description" ></textarea>
+  </mat-form-field>
+  <button type="submit" matButton="filled"><mat-icon>send</mat-icon>Submit</button>
+</form>

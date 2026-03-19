@@ -19,12 +19,12 @@ public class TaskController {
     private final TaskService taskService;
 
     @PostMapping
-    public ResponseEntity<String> createTask(@Valid @RequestBody TaskRequestDto taskRequest) {
+    public ResponseEntity<TaskResponseDto> createTask(@Valid @RequestBody TaskRequestDto taskRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(taskService.createTask(taskRequest));
     }
 
-    @PatchMapping("/{taskId}")
-    public ResponseEntity<String> updateTask(@PathVariable Long taskId, @Valid @RequestBody TaskRequestDto taskRequest) {
+    @PutMapping("/{taskId}")
+    public ResponseEntity<TaskResponseDto> updateTask(@PathVariable Long taskId, @Valid @RequestBody TaskRequestDto taskRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(taskService.updateTask(taskId, taskRequest));
     }
 
@@ -45,7 +45,8 @@ public class TaskController {
     }
 
     @DeleteMapping("/{taskId}")
-    public ResponseEntity<String> deleteTask(@PathVariable Long taskId) {
-        return ResponseEntity.status(HttpStatus.OK).body( taskService.deleteTask(taskId));
+    public ResponseEntity<Void> deleteTask(@PathVariable Long taskId) {
+        taskService.deleteTask(taskId);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

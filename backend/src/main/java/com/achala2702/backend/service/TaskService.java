@@ -18,24 +18,24 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
 
-    public String createTask(TaskRequestDto createTaskRequest) {
+    public TaskResponseDto createTask(TaskRequestDto createTaskRequest) {
 
         TaskModel task = taskMapper.maptoTaskModel(createTaskRequest);
-        taskRepository.save(task);
+        TaskModel savedTask = taskRepository.save(task);
 
-        return "task created successfully!";
+        return taskMapper.maptoTaskDto(savedTask);
     }
 
-    public String updateTask(Long taskId, TaskRequestDto taskRequest) {
+    public TaskResponseDto updateTask(Long taskId, TaskRequestDto taskRequest) {
 
         TaskModel task = taskRepository.findById(taskId).orElseThrow(()-> new TaskNotFoundException("Task not found with ID: " + taskId));
 
         task.setTitle(taskRequest.title());
         task.setDescription(taskRequest.description());
 
-        taskRepository.save(task);
+        TaskModel updatedTask = taskRepository.save(task);
 
-        return "task updated successfully!";
+        return taskMapper.maptoTaskDto(updatedTask);
     }
 
     public void updateTaskStatus(Long taskId, StatusUpdateRequestDto statusDto) {
@@ -58,12 +58,10 @@ public class TaskService {
         return taskMapper.maptoTaskDto(task);
     }
 
-    public String deleteTask(Long taskId) {
+    public void deleteTask(Long taskId) {
 
         TaskModel task = taskRepository.findById(taskId).orElseThrow(()-> new TaskNotFoundException("Task not found with ID: " + taskId));
 
         taskRepository.delete(task);
-
-        return "Task deleted successfully!";
     }
 }
