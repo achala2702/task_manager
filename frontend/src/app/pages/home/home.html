@@ -1,0 +1,13 @@
+<app-header />
+
+<main class="task-container">
+
+    @if (isLoading()) {
+        <p>loading tasks...</p>
+    }
+
+    @for (task of tasks(); track task.taskId) {
+        <app-task-card [task]="task" />
+    }
+</main>
+

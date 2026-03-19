@@ -1,0 +1,8 @@
+<mat-form-field>
+  <mat-label>Status</mat-label>
+  <mat-select [value] = "selectedStatus()" (selectionChange)="onStatusChange($event.value)">
+    @for (status of statusLabels; track status) {
+      <mat-option [value]="status.value">{{status.viewValue}}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
