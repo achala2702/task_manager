@@ -70,7 +70,7 @@ public class TaskService {
     public List<TaskResponseDto> getAllTasks() {
         UserModel user = getUserIdFromToken();
 
-        return taskRepository.findAllByUser(user)
+        return taskRepository.findAllByUserOrderByCreatedAtDesc(user)
                 .stream().map(taskMapper::maptoTaskDto).toList();
     }
 

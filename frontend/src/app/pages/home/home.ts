@@ -62,7 +62,7 @@ export class Home implements OnInit {
   onFormSubmitCreate(formData: TaskFormData) {
     this.taskService.createTask(formData).subscribe({
       next: (newTask) => {
-        this.tasks.push(newTask);
+        this.tasks.unshift(newTask);
         this.closeTaskForm();
         this.snackBar.open(`Task created successfully!`, 'Close', {
           duration: 3000,

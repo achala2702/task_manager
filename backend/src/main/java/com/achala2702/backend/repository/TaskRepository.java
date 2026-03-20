@@ -10,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface TaskRepository extends JpaRepository<TaskModel, Long> {
-    List<TaskModel> findAllByUser(UserModel user);
+    List<TaskModel> findAllByUserOrderByCreatedAtDesc(UserModel user);
 }

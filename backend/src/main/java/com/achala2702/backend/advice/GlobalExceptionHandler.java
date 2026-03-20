@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class GlobalExceptionHandler {
 
     //handle access denied exception
-    @ExceptionHandler(InvalidInputException.class)
+    @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponseDto> handleAccessDeniedException(AccessDeniedException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ErrorResponseDto.builder()

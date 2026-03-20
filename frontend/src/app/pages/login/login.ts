@@ -29,7 +29,7 @@ export class Login {
         });
 
         localStorage.setItem('username', response.username);
-        this.router.navigate(['/home']);
+        this.router.navigate(['/']);
       },
       error: (err) => {
         console.error('Login error:', err);

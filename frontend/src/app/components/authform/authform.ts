@@ -1,4 +1,4 @@
-import { Component, input, OnInit, output } from '@angular/core';
+import { Component, inject, input, OnInit, output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -26,17 +26,17 @@ export interface TAuthForm {
 })
 export class Authform implements OnInit {
 
-  mode = input<'login' | 'register'>('login');
-  authForm!: FormGroup
-  submitForm = output<TAuthForm>()
+  private fb = inject(FormBuilder);
 
-  constructor(private fb: FormBuilder) {}
+  mode = input<'login' | 'register'>('login');
+  authForm: FormGroup = this.fb.group({});
+  submitForm = output<TAuthForm>()
 
  ngOnInit(): void {
     this.buildForm();
   }
 
-    private buildForm() {
+  private buildForm() {
     const isRegister = this.mode() === 'register';
 
     this.authForm = this.fb.group({
