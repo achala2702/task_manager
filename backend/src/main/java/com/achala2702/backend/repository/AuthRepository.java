@@ -1,14 +1,15 @@
 package com.achala2702.backend.repository;
 
-import com.achala2702.backend.model.TaskModel;
 import com.achala2702.backend.model.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface TaskRepository extends JpaRepository<TaskModel, Long> {
-    List<TaskModel> findAllByUser(UserModel user);
+public interface AuthRepository extends JpaRepository<UserModel, Long> {
+
+    boolean existsByUsername(String username);
+
+    Optional<UserModel> findByUsername(String username);
 }

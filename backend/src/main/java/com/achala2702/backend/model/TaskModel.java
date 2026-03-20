@@ -26,6 +26,9 @@ public class TaskModel {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserModel user;
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
