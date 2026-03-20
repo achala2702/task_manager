@@ -1,4 +1,8 @@
 <mat-toolbar class="header">
     <h1>Task Manager</h1>
+    <div class="login-section">
+        <p>Welcome! {{username}}</p>
+    <button matButton="filled" (click)="handleLoginBtnClick()" >{{ isLoggedIn ? 'Logout' : 'Login' }}</button>
+    </div>
 </mat-toolbar>
 

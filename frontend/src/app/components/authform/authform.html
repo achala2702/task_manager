@@ -1,0 +1,37 @@
+<form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+  <h2>{{ mode() === 'login' ? 'Login' : 'Create Account' }}</h2>
+
+  <mat-form-field appearance="outline">
+    <mat-label>UserName</mat-label>
+    <input matInput placeholder="enter your username!" formControlName="username" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Password</mat-label>
+    <input type="password" matInput placeholder="enter password!" formControlName="password" />
+  </mat-form-field>
+
+  @if (mode() === 'register') {
+    <mat-form-field appearance="outline">
+      <mat-label>Confirm Password</mat-label>
+      <input
+        type="password"
+        matInput
+        placeholder="re enter password!"
+        formControlName="confirmPassword"
+      />
+    </mat-form-field>
+  }
+
+  <button type="submit" [disabled]="authForm.invalid" matButton="filled">
+    {{ mode() === 'login' ? 'Sign In' : 'Register' }}
+  </button>
+
+    <p class="switch-mode">
+    {{ mode() === 'login' ? "Don't have an account?" : 'Already have an account?' }}
+    <a [routerLink]="mode() === 'login' ? '/register' : '/login'">
+      {{ mode() === 'login' ? 'Register here' : 'Login here' }}
+    </a>
+  </p>
+
+</form>
