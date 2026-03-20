@@ -1,10 +1,7 @@
 package com.achala2702.backend.advice;
 
 import com.achala2702.backend.dto.ErrorResponseDto;
-import com.achala2702.backend.exception.InvalidInputException;
-import com.achala2702.backend.exception.TaskNotFoundException;
-import com.achala2702.backend.exception.UserAlreadyExistsException;
-import com.achala2702.backend.exception.UserNotFoundException;
+import com.achala2702.backend.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,6 +11,17 @@ import java.time.LocalDateTime;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    //handle access denied exception
+    @ExceptionHandler(InvalidInputException.class)
+    public ResponseEntity<ErrorResponseDto> handleAccessDeniedException(AccessDeniedException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ErrorResponseDto.builder()
+                        .status(HttpStatus.UNAUTHORIZED)
+                        .timeStamp(LocalDateTime.now())
+                        .errors(e.getMessage())
+                        .build());
+    }
 
     //handle invalid input exception
     @ExceptionHandler(InvalidInputException.class)

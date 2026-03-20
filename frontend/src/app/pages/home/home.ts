@@ -2,10 +2,11 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { Header } from '../../components/header/header';
 import { TaskService } from '../../services/task-service';
 import { StatusType, TaskModel } from '../../models/task-model';
-import { MatAnchor, MatButtonModule } from "@angular/material/button";
+import { MatAnchor, MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TaskForm, TaskFormData } from '../../components/task-form/task-form';
 import { TaskCard } from '../../components/task-card/task-card';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-home',
@@ -15,9 +16,9 @@ import { TaskCard } from '../../components/task-card/task-card';
 })
 export class Home implements OnInit {
   private taskService = inject(TaskService);
+  private snackBar = inject(MatSnackBar);
 
   tasks: TaskModel[] = [];
-  errorMessage = signal<string | null>(null);
   isLoading = signal<boolean>(false);
   isTaskFormOpen = signal<boolean>(false);
   editingTask: TaskModel | null = null;
@@ -55,7 +56,7 @@ export class Home implements OnInit {
   }
 
   onDeleteRequest(taskId: number) {
-    this.tasks = this.tasks.filter(task => task.taskId !== taskId);
+    this.tasks = this.tasks.filter((task) => task.taskId !== taskId);
   }
 
   onFormSubmitCreate(formData: TaskFormData) {
@@ -63,9 +64,21 @@ export class Home implements OnInit {
       next: (newTask) => {
         this.tasks.push(newTask);
         this.closeTaskForm();
+        this.snackBar.open(`Task created successfully!`, 'Close', {
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass: ['success-snackbar'],
+        });
       },
       error: (err) => {
         console.error('Create Failed', err);
+        this.snackBar.open('Failed to create task. Please try again.', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass: ['error-snackbar'],
+        });
       },
     });
   }
@@ -73,15 +86,27 @@ export class Home implements OnInit {
   onFormSubmitEdit({ taskId, task }: { taskId: number; task: TaskFormData }) {
     this.taskService.updateTask(taskId, task).subscribe({
       next: (updatedTask) => {
-        const index = this.tasks.findIndex(t => t.taskId === taskId);
-        if(index !== -1) {
+        const index = this.tasks.findIndex((t) => t.taskId === taskId);
+        if (index !== -1) {
           this.tasks[index] = updatedTask;
         }
         this.closeTaskForm();
+
+        this.snackBar.open(`Task updated successfully!`, 'Close', {
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass: ['success-snackbar'],
+        });
       },
       error: (err) => {
         console.error('Update Failed', err);
-        this.errorMessage.set('Failed to update task. Please try again.');
+        this.snackBar.open('Failed to update task. Please try again.', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass: ['error-snackbar'],
+        });
       },
     });
   }
@@ -89,14 +114,13 @@ export class Home implements OnInit {
   onStatusChange({ taskId, newStatus }: { taskId: number; newStatus: StatusType }) {
     this.taskService.updateStatus(taskId, newStatus).subscribe({
       next: () => {
-        const task = this.tasks.find(t => t.taskId === taskId);
+        const task = this.tasks.find((t) => t.taskId === taskId);
         if (task) {
           task.status = newStatus;
         }
       },
       error: (err) => {
         console.error('Status Update Failed', err);
-        this.errorMessage.set('Failed to update status. Please try again.');
       },
     });
   }

@@ -27,7 +27,7 @@ export class AuthService {
   }
 
     private handleError(error: any) {
-      console.error('API error:', error);
-      return throwError(() => new Error('Failed to process request'));
+      console.error('API error:', error.error.errors);
+      return throwError(() => new Error(error.error.errors || 'Failed to process request'));
     }
 }
