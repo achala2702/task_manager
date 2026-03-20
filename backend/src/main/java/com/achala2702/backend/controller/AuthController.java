@@ -1,7 +1,9 @@
 package com.achala2702.backend.controller;
 
 import com.achala2702.backend.dto.UserAuthRequestDto;
+import com.achala2702.backend.dto.UserLoginResponseDto;
 import com.achala2702.backend.service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +25,13 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@Valid @RequestBody UserAuthRequestDto userAuthRequestDto, HttpServletResponse response) {
-        authService.login(userAuthRequestDto, response);
+    public ResponseEntity<UserLoginResponseDto> login(@Valid @RequestBody UserAuthRequestDto userAuthRequestDto, HttpServletResponse response) {
+        return ResponseEntity.status(HttpStatus.OK).body(authService.login(userAuthRequestDto, response));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response){
+        authService.logout(request, response);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

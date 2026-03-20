@@ -18,6 +18,7 @@ export class Login {
     this.authService.login(formData.username, formData.password).subscribe({
       next: (response) => {
         console.log('Login successful:', response);
+        localStorage.setItem('username', response.username);
         this.router.navigate(['/home']);
       },
       error: (err) => {

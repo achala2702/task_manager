@@ -1,8 +1,21 @@
 .header {
     background-color: black;
     color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
     h1 {
         font-weight: bold;
+    }
+
+    .login-section {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        
+        p {
+            font-style: italic;
+        }
     }
 }
