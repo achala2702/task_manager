@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Header } from '../../components/header/header';
 import { TaskService } from '../../services/task-service';
 import { StatusType, TaskModel } from '../../models/task-model';
@@ -7,10 +7,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { TaskForm, TaskFormData } from '../../components/task-form/task-form';
 import { TaskCard } from '../../components/task-card/task-card';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-home',
-  imports: [Header, TaskCard, MatAnchor, MatButtonModule, MatIconModule, TaskForm],
+  imports: [Header, TaskCard, MatAnchor, MatButtonModule, MatIconModule, TaskForm, MatSelectModule],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -18,10 +19,25 @@ export class Home implements OnInit {
   private taskService = inject(TaskService);
   private snackBar = inject(MatSnackBar);
 
-  tasks: TaskModel[] = [];
+  tasks = signal<TaskModel[]>([]);
   isLoading = signal<boolean>(false);
   isTaskFormOpen = signal<boolean>(false);
   editingTask: TaskModel | null = null;
+  currentFilter = signal<StatusType | 'ALL'>('ALL');
+
+  filteredTasks = computed(() => {
+    const filter = this.currentFilter();
+    console.log(filter);
+    const currentTasks = this.tasks();
+    if (filter === 'ALL') {
+      return currentTasks;
+    }
+    return currentTasks.filter((task: TaskModel) => task.status === filter);
+  });
+
+  setFilter(filter: StatusType | 'ALL') {
+    this.currentFilter.set(filter);
+  }
 
   openEditForm(task: TaskModel) {
     this.editingTask = task;
@@ -41,7 +57,7 @@ export class Home implements OnInit {
     this.isLoading.set(true);
     this.taskService.getTasks().subscribe({
       next: (data: TaskModel[]) => {
-        this.tasks = data;
+        this.tasks.set(data);
         this.isLoading.set(false);
       },
       error: (err) => {
@@ -56,13 +72,13 @@ export class Home implements OnInit {
   }
 
   onDeleteRequest(taskId: number) {
-    this.tasks = this.tasks.filter((task) => task.taskId !== taskId);
+    this.tasks.set(this.tasks().filter((task) => task.taskId !== taskId));
   }
 
   onFormSubmitCreate(formData: TaskFormData) {
     this.taskService.createTask(formData).subscribe({
       next: (newTask) => {
-        this.tasks.unshift(newTask);
+        this.tasks.set([newTask, ...this.tasks()]);
         this.closeTaskForm();
         this.snackBar.open(`Task created successfully!`, 'Close', {
           duration: 3000,
@@ -86,9 +102,11 @@ export class Home implements OnInit {
   onFormSubmitEdit({ taskId, task }: { taskId: number; task: TaskFormData }) {
     this.taskService.updateTask(taskId, task).subscribe({
       next: (updatedTask) => {
-        const index = this.tasks.findIndex((t) => t.taskId === taskId);
+        const current = this.tasks();
+        const index = current.findIndex((task) => task.taskId === taskId);
         if (index !== -1) {
-          this.tasks[index] = updatedTask;
+          current[index] = updatedTask;
+          this.tasks.set([...current]);
         }
         this.closeTaskForm();
 
@@ -114,13 +132,20 @@ export class Home implements OnInit {
   onStatusChange({ taskId, newStatus }: { taskId: number; newStatus: StatusType }) {
     this.taskService.updateStatus(taskId, newStatus).subscribe({
       next: () => {
-        const task = this.tasks.find((t) => t.taskId === taskId);
+        const task = this.tasks().find((t) => t.taskId === taskId);
         if (task) {
           task.status = newStatus;
+          this.currentFilter.set(newStatus);
         }
       },
       error: (err) => {
         console.error('Status Update Failed', err);
+        this.snackBar.open('Failed to update status. Please try again.', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass: ['error-snackbar'],
+        });
       },
     });
   }

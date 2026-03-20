@@ -5,15 +5,38 @@
     <p>loading tasks...</p>
   }
 
-  <button matButton="filled" (click)="openAddForm()"><mat-icon>add</mat-icon>New Task</button>
+  <div class="filter">
+    <button matButton="filled" (click)="openAddForm()"><mat-icon>add</mat-icon>New Task</button>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Filter Tasks</mat-label>
+      <mat-select [value]="currentFilter()" (selectionChange)="setFilter($event.value)">
+        <mat-option value="ALL">All Tasks</mat-option>
+        <mat-option value="NOT_STARTED">Not Started</mat-option>
+        <mat-option value="PENDING">Pending</mat-option>
+        <mat-option value="COMPLETED">Completed</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 
   <div class="task-container">
-    @for (task of tasks; track task.taskId) {
-      <app-task-card [task]="task" (editRequest)="openEditForm($event)" (deleteRequest)="onDeleteRequest(task.taskId)" (statusChangeRequest)="onStatusChange($event)"/>
+    @for (task of filteredTasks(); track task.taskId) {
+      <app-task-card
+        [task]="task"
+        (editRequest)="openEditForm($event)"
+        (deleteRequest)="onDeleteRequest(task.taskId)"
+        (statusChangeRequest)="onStatusChange($event)"
+      />
     }
   </div>
 
   @if (isTaskFormOpen()) {
-    <app-task-form (close)="closeTaskForm()" [initialData]="editingTask" (submitCreate)="onFormSubmitCreate($event)" (submitEdit)="onFormSubmitEdit($event)" () />
+    <app-task-form
+      (close)="closeTaskForm()"
+      [initialData]="editingTask"
+      (submitCreate)="onFormSubmitCreate($event)"
+      (submitEdit)="onFormSubmitEdit($event)"
+      ()
+    />
   }
 </main>
