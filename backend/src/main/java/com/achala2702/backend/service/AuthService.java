@@ -45,7 +45,7 @@ public class AuthService {
         String token = jwtUtil.generateJwt(dbUser.getUsername());
         ResponseCookie cookie = ResponseCookie.from("jwt", token)
                 .httpOnly(true)
-                .secure(true)
+                .secure(false)
                 .path("/")
                 .maxAge(Duration.ofHours(2))
                 .sameSite("Lax")

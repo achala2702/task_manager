@@ -13,27 +13,27 @@ export class TaskService {
   private apiUrl = `${environment.apiBaseUrl}/task`;
 
   getTasks() {
-    return this.http.get<TaskModel[]>(this.apiUrl).pipe(catchError(this.handleError));
+    return this.http.get<TaskModel[]>(this.apiUrl, {withCredentials: true}).pipe(catchError(this.handleError));
   }
 
   createTask(task: TaskFormData) {
-    return this.http.post<TaskModel>(this.apiUrl, task).pipe(catchError(this.handleError));
+    return this.http.post<TaskModel>(this.apiUrl, task, {withCredentials: true}).pipe(catchError(this.handleError));
   }
 
   updateTask(taskId: number, task: TaskFormData) {
     return this.http
-      .put<TaskModel>(`${this.apiUrl}/${taskId}`, task)
+      .put<TaskModel>(`${this.apiUrl}/${taskId}`, task, {withCredentials: true})
       .pipe(catchError(this.handleError));
   }
 
   updateStatus(taskId: number, status: StatusType) {
     return this.http
-      .patch<void>(`${this.apiUrl}/${taskId}/status`, { status })
+      .patch<void>(`${this.apiUrl}/${taskId}/status`, { status }, {withCredentials: true})
       .pipe(catchError(this.handleError));
   }
 
   deleteTask(taskId: number) {
-    return this.http.delete<void>(`${this.apiUrl}/${taskId}`).pipe(catchError(this.handleError));
+    return this.http.delete<void>(`${this.apiUrl}/${taskId}`, {withCredentials: true}).pipe(catchError(this.handleError));
   }
 
   private handleError(error: any) {
