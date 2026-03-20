@@ -12,3 +12,9 @@ main {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+.filter {
+    display: flex;
+    align-items: center;
+    gap:2rem;
+}
